@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import type { AppState } from '../types'
 import {
   buildSchedule,
+  chaptersLabel,
   formatDate,
   isPast,
   isToday,
@@ -9,10 +10,10 @@ import {
 
 interface Props {
   state: AppState
-  onToggleChapter: (planId: string, chapter: number) => void
+  onSetChaptersRead: (planId: string, chapters: number[], read: boolean) => void
 }
 
-export function PlanView({ state, onToggleChapter }: Props) {
+export function PlanView({ state, onSetChaptersRead }: Props) {
   const plan = state.plans.find((p) => p.active)
 
   const schedule = useMemo(
@@ -46,7 +47,11 @@ export function PlanView({ state, onToggleChapter }: Props) {
       <div className="plan-header">
         <div>
           <h2>{plan.book}</h2>
-          <p className="muted">{plan.name}</p>
+          <p className="muted">
+            {plan.chaptersPerDay === 1
+              ? '1 capítulo por dia'
+              : `${plan.chaptersPerDay} capítulos por dia`}
+          </p>
         </div>
         <span className="badge badge-active">Ativo</span>
       </div>
@@ -60,14 +65,16 @@ export function PlanView({ state, onToggleChapter }: Props) {
         </span>
       </div>
 
-      <ul className="day-list">
-        {schedule.map(({ chapter, date }) => {
-          const read = Boolean(planProgress[chapter])
+      <ol className="day-list">
+        {schedule.map(({ chapters, date }, index) => {
+          const readCountDay = chapters.filter((c) => planProgress[c]).length
+          const allRead = readCountDay === chapters.length
+          const someRead = readCountDay > 0 && !allRead
           const today = isToday(date)
-          const overdue = !read && isPast(date)
+          const overdue = !allRead && isPast(date)
           const classes = [
             'day-item',
-            read && 'day-read',
+            allRead && 'day-read',
             today && 'day-today',
             overdue && 'day-overdue',
           ]
@@ -75,15 +82,20 @@ export function PlanView({ state, onToggleChapter }: Props) {
             .join(' ')
 
           return (
-            <li key={chapter} className={classes}>
+            <li key={index} className={classes}>
               <label>
                 <input
                   type="checkbox"
-                  checked={read}
-                  onChange={() => onToggleChapter(plan.id, chapter)}
+                  checked={allRead}
+                  ref={(el) => {
+                    if (el) el.indeterminate = someRead
+                  }}
+                  onChange={() =>
+                    onSetChaptersRead(plan.id, chapters, !allRead)
+                  }
                 />
                 <span className="day-chapter">
-                  {plan.book} {chapter}
+                  {chaptersLabel(plan.book, chapters)}
                 </span>
                 <span className="day-date">
                   {formatDate(date)}
@@ -94,7 +106,7 @@ export function PlanView({ state, onToggleChapter }: Props) {
             </li>
           )
         })}
-      </ul>
+      </ol>
     </section>
   )
 }

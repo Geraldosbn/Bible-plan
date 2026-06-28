@@ -6,12 +6,15 @@ navegador — não há backend nem login.
 
 ## Funcionalidades
 
-- **Plano de Êxodo**, 1 capítulo por dia (40 dias).
+- **Plano de Êxodo** (40 capítulos).
+- **Capítulos por dia** configurável: os capítulos são agrupados em blocos
+  (ex.: 3 por dia → "Êxodo 1–3", "Êxodo 4–6"...). Cada dia tem um checkbox; o
+  estado fica indeterminado quando só parte dos capítulos do dia foi lida.
 - **Marcar capítulos lidos** com checkbox; barra de progresso e contagem.
 - **Config → Dias para pular**: escolha os dias da semana (ex.: domingo) que o
-  cronograma deve ignorar. Os capítulos são reagendados automaticamente para os
-  próximos dias válidos.
-- **Data de início** ajustável por plano.
+  cronograma deve ignorar. Os dias são reagendados automaticamente para as
+  próximas datas válidas.
+- **Data de início** e **capítulos por dia** ajustáveis por plano.
 - **Flag "Ativo"**: apenas um plano fica ativo por vez (estrutura já preparada
   para múltiplos planos no futuro).
 - **Zerar progresso** de um plano.

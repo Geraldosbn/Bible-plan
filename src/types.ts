@@ -8,8 +8,10 @@ export interface ReadingPlan {
   name: string
   /** Livro lido. */
   book: string
-  /** Total de capítulos = total de dias de leitura. */
+  /** Total de capítulos do livro. */
   totalChapters: number
+  /** Quantos capítulos são lidos por dia (>= 1). */
+  chaptersPerDay: number
   /** Data de início do plano (ISO yyyy-mm-dd). */
   startDate: string
   /** Apenas um plano fica ativo por vez. */

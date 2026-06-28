@@ -20,7 +20,13 @@ export function loadState(): AppState {
 
     const parsed = JSON.parse(raw) as Partial<AppState>
     return {
-      plans: parsed.plans?.length ? parsed.plans : base.plans,
+      // Normaliza planos antigos que podem não ter chaptersPerDay.
+      plans: parsed.plans?.length
+        ? parsed.plans.map((p) => ({
+            ...p,
+            chaptersPerDay: Math.max(1, Math.floor(p.chaptersPerDay) || 1),
+          }))
+        : base.plans,
       settings: {
         skipWeekdays: parsed.settings?.skipWeekdays ?? base.settings.skipWeekdays,
       },

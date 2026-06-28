@@ -1,8 +1,8 @@
 import type { ReadingPlan, Weekday } from './types'
 
 export interface ScheduledDay {
-  /** Número do capítulo (1-indexado). */
-  chapter: number
+  /** Capítulos lidos neste dia (1-indexados), ex: [4, 5, 6]. */
+  chapters: number[]
   /** Data agendada para a leitura. */
   date: Date
 }
@@ -14,8 +14,9 @@ export function parseISODate(iso: string): Date {
 }
 
 /**
- * Monta o cronograma do plano: cada capítulo cai no próximo dia válido,
- * pulando os dias da semana configurados.
+ * Monta o cronograma do plano: agrupa os capítulos em blocos de
+ * `chaptersPerDay` e atribui cada bloco ao próximo dia válido, pulando
+ * os dias da semana configurados.
  *
  * Se todos os 7 dias estiverem marcados para pular, não há dia válido —
  * retorna lista vazia para evitar laço infinito.
@@ -26,18 +27,32 @@ export function buildSchedule(
 ): ScheduledDay[] {
   if (skipWeekdays.length >= 7) return []
 
+  const perDay = Math.max(1, Math.floor(plan.chaptersPerDay))
   const skip = new Set<number>(skipWeekdays)
   const days: ScheduledDay[] = []
   const cursor = parseISODate(plan.startDate)
 
-  while (days.length < plan.totalChapters) {
+  let nextChapter = 1
+  while (nextChapter <= plan.totalChapters) {
     if (!skip.has(cursor.getDay())) {
-      days.push({ chapter: days.length + 1, date: new Date(cursor) })
+      const last = Math.min(nextChapter + perDay - 1, plan.totalChapters)
+      const chapters: number[] = []
+      for (let c = nextChapter; c <= last; c++) chapters.push(c)
+      days.push({ chapters, date: new Date(cursor) })
+      nextChapter = last + 1
     }
     cursor.setDate(cursor.getDate() + 1)
   }
 
   return days
+}
+
+/** Rótulo do intervalo de capítulos de um dia, ex: "Êxodo 4–6" ou "Êxodo 7". */
+export function chaptersLabel(book: string, chapters: number[]): string {
+  if (chapters.length === 0) return book
+  const first = chapters[0]
+  const last = chapters[chapters.length - 1]
+  return first === last ? `${book} ${first}` : `${book} ${first}–${last}`
 }
 
 const WEEKDAY_LABELS = [

@@ -7,6 +7,10 @@ export interface AppStateApi {
   state: AppState
   /** Marca/desmarca um capítulo como lido no plano informado. */
   toggleChapter: (planId: string, chapter: number) => void
+  /** Define o estado de leitura de um conjunto de capítulos (um dia inteiro). */
+  setChaptersRead: (planId: string, chapters: number[], read: boolean) => void
+  /** Define quantos capítulos são lidos por dia em um plano (mínimo 1). */
+  setChaptersPerDay: (planId: string, chaptersPerDay: number) => void
   /** Ativa/desativa um dia da semana na lista de dias pulados. */
   toggleSkipWeekday: (day: Weekday) => void
   /** Define qual plano está ativo (desativa os demais). */
@@ -38,6 +42,40 @@ export function useAppState(): AppStateApi {
       }
     })
   }, [])
+
+  const setChaptersRead = useCallback(
+    (planId: string, chapters: number[], read: boolean) => {
+      setState((prev) => {
+        const planProgress = { ...(prev.progress[planId] ?? {}) }
+        if (read) {
+          const stamp = todayISO()
+          for (const c of chapters) {
+            if (!planProgress[c]) planProgress[c] = stamp
+          }
+        } else {
+          for (const c of chapters) delete planProgress[c]
+        }
+        return {
+          ...prev,
+          progress: { ...prev.progress, [planId]: planProgress },
+        }
+      })
+    },
+    [],
+  )
+
+  const setChaptersPerDay = useCallback(
+    (planId: string, chaptersPerDay: number) => {
+      const value = Math.max(1, Math.floor(chaptersPerDay) || 1)
+      setState((prev) => ({
+        ...prev,
+        plans: prev.plans.map((p) =>
+          p.id === planId ? { ...p, chaptersPerDay: value } : p,
+        ),
+      }))
+    },
+    [],
+  )
 
   const toggleSkipWeekday = useCallback((day: Weekday) => {
     setState((prev) => {
@@ -76,6 +114,8 @@ export function useAppState(): AppStateApi {
   return {
     state,
     toggleChapter,
+    setChaptersRead,
+    setChaptersPerDay,
     toggleSkipWeekday,
     setActivePlan,
     setStartDate,

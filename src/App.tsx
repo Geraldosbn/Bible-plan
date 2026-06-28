@@ -10,7 +10,8 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('plano')
   const {
     state,
-    toggleChapter,
+    setChaptersRead,
+    setChaptersPerDay,
     toggleSkipWeekday,
     setActivePlan,
     setStartDate,
@@ -39,13 +40,14 @@ export default function App() {
 
       <main className="app-main">
         {tab === 'plano' ? (
-          <PlanView state={state} onToggleChapter={toggleChapter} />
+          <PlanView state={state} onSetChaptersRead={setChaptersRead} />
         ) : (
           <ConfigView
             state={state}
             onToggleSkipWeekday={toggleSkipWeekday}
             onSetActivePlan={setActivePlan}
             onSetStartDate={setStartDate}
+            onSetChaptersPerDay={setChaptersPerDay}
             onResetProgress={resetProgress}
           />
         )}

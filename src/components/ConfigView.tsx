@@ -6,6 +6,7 @@ interface Props {
   onToggleSkipWeekday: (day: Weekday) => void
   onSetActivePlan: (planId: string) => void
   onSetStartDate: (planId: string, startDate: string) => void
+  onSetChaptersPerDay: (planId: string, chaptersPerDay: number) => void
   onResetProgress: (planId: string) => void
 }
 
@@ -14,6 +15,7 @@ export function ConfigView({
   onToggleSkipWeekday,
   onSetActivePlan,
   onSetStartDate,
+  onSetChaptersPerDay,
   onResetProgress,
 }: Props) {
   const { skipWeekdays } = state.settings
@@ -78,6 +80,18 @@ export function ConfigView({
                 </div>
 
                 <div className="plan-config-controls">
+                  <label className="field">
+                    <span>Capítulos por dia</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={plan.totalChapters}
+                      value={plan.chaptersPerDay}
+                      onChange={(e) =>
+                        onSetChaptersPerDay(plan.id, e.target.valueAsNumber)
+                      }
+                    />
+                  </label>
                   <label className="field">
                     <span>Início</span>
                     <input

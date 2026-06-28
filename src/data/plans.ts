@@ -17,9 +17,10 @@ export function defaultPlans(): ReadingPlan[] {
   return [
     {
       id: 'exodo-1cap-dia',
-      name: 'Êxodo — 1 capítulo por dia',
+      name: 'Êxodo',
       book: 'Êxodo',
       totalChapters: EXODUS_CHAPTERS,
+      chaptersPerDay: 1,
       startDate: todayISO(),
       active: true,
     },
