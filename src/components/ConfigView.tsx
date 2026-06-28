@@ -1,5 +1,50 @@
+import { useEffect, useState } from 'react'
 import type { AppState, Weekday } from '../types'
 import { ALL_WEEKDAYS, weekdayLabel } from '../schedule'
+
+/**
+ * Input numérico que permite ficar vazio durante a digitação.
+ * Só consolida um valor válido (>= 1) no onChange; ao sair do campo,
+ * um valor vazio/inválido volta para 1 e é limitado ao máximo.
+ */
+function ChaptersPerDayInput({
+  value,
+  max,
+  onCommit,
+}: {
+  value: number
+  max: number
+  onCommit: (value: number) => void
+}) {
+  const [text, setText] = useState(String(value))
+
+  // Mantém o campo em sincronia quando o valor muda por fora.
+  useEffect(() => {
+    setText(String(value))
+  }, [value])
+
+  return (
+    <input
+      type="number"
+      min={1}
+      max={max}
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value
+        setText(raw)
+        const n = Number(raw)
+        if (raw !== '' && Number.isInteger(n) && n >= 1) {
+          onCommit(n)
+        }
+      }}
+      onBlur={() => {
+        const n = Math.min(max, Math.max(1, Math.floor(Number(text) || 1)))
+        onCommit(n)
+        setText(String(n))
+      }}
+    />
+  )
+}
 
 interface Props {
   state: AppState
@@ -82,14 +127,10 @@ export function ConfigView({
                 <div className="plan-config-controls">
                   <label className="field">
                     <span>Capítulos por dia</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={plan.totalChapters}
+                    <ChaptersPerDayInput
                       value={plan.chaptersPerDay}
-                      onChange={(e) =>
-                        onSetChaptersPerDay(plan.id, e.target.valueAsNumber)
-                      }
+                      max={plan.totalChapters}
+                      onCommit={(n) => onSetChaptersPerDay(plan.id, n)}
                     />
                   </label>
                   <label className="field">
