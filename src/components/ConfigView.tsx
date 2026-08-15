@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { AppState, Weekday } from '../types'
-import { ALL_WEEKDAYS, weekdayLabel } from '../schedule'
+import { ALL_WEEKDAYS, planTotalUnits, weekdayLabel } from '../schedule'
 
 /**
  * Input numérico que permite ficar vazio durante a digitação.
@@ -70,8 +70,8 @@ export function ConfigView({
       <div className="card">
         <h3>Dias da semana para pular</h3>
         <p className="muted">
-          Os dias marcados são ignorados no cronograma — nenhum capítulo é
-          agendado neles.
+          Os dias marcados são ignorados no cronograma — nenhuma leitura é
+          agendada neles.
         </p>
         <div className="weekday-grid">
           {ALL_WEEKDAYS.map((day) => {
@@ -101,7 +101,9 @@ export function ConfigView({
         <p className="muted">Apenas um plano fica ativo por vez.</p>
         <ul className="plan-config-list">
           {state.plans.map((plan) => {
+            const total = planTotalUnits(plan)
             const readCount = Object.keys(state.progress[plan.id] ?? {}).length
+            const unitWord = plan.kind === 'readings' ? 'leituras' : 'capítulos'
             return (
               <li key={plan.id} className="plan-config-item">
                 <div className="plan-config-main">
@@ -120,19 +122,21 @@ export function ConfigView({
                     </span>
                   </label>
                   <p className="muted small">
-                    {readCount} / {plan.totalChapters} capítulos lidos
+                    {readCount} / {total} {unitWord} lidas
                   </p>
                 </div>
 
                 <div className="plan-config-controls">
-                  <label className="field">
-                    <span>Capítulos por dia</span>
-                    <ChaptersPerDayInput
-                      value={plan.chaptersPerDay}
-                      max={plan.totalChapters}
-                      onCommit={(n) => onSetChaptersPerDay(plan.id, n)}
-                    />
-                  </label>
+                  {plan.kind === 'chapters' && (
+                    <label className="field">
+                      <span>Capítulos por dia</span>
+                      <ChaptersPerDayInput
+                        value={plan.chaptersPerDay}
+                        max={plan.totalChapters}
+                        onCommit={(n) => onSetChaptersPerDay(plan.id, n)}
+                      />
+                    </label>
+                  )}
                   <label className="field">
                     <span>Início</span>
                     <input

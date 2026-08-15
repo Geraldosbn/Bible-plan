@@ -1,7 +1,8 @@
-import type { AppState } from './types'
+import type { AppState, ReadingPlan } from './types'
 import { defaultPlans } from './data/plans'
 
-const STORAGE_KEY = 'bible-plan:v1'
+// v2: modelo passou de "capítulos" (Êxodo) para plano de Tiago por passagens.
+const STORAGE_KEY = 'bible-plan:v2'
 
 export function defaultState(): AppState {
   return {
@@ -9,6 +10,17 @@ export function defaultState(): AppState {
     settings: { skipWeekdays: [] },
     progress: {},
   }
+}
+
+/** Garante campos coerentes por tipo de plano em dados carregados. */
+function normalizePlan(plan: ReadingPlan): ReadingPlan {
+  if (plan.kind === 'chapters') {
+    return {
+      ...plan,
+      chaptersPerDay: Math.max(1, Math.floor(plan.chaptersPerDay) || 1),
+    }
+  }
+  return plan
 }
 
 /** Lê o estado do localStorage, mesclando com os defaults para resistir a versões antigas. */
@@ -20,12 +32,8 @@ export function loadState(): AppState {
 
     const parsed = JSON.parse(raw) as Partial<AppState>
     return {
-      // Normaliza planos antigos que podem não ter chaptersPerDay.
       plans: parsed.plans?.length
-        ? parsed.plans.map((p) => ({
-            ...p,
-            chaptersPerDay: Math.max(1, Math.floor(p.chaptersPerDay) || 1),
-          }))
+        ? parsed.plans.map(normalizePlan)
         : base.plans,
       settings: {
         skipWeekdays: parsed.settings?.skipWeekdays ?? base.settings.skipWeekdays,

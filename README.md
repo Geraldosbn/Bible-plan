@@ -1,20 +1,23 @@
 # 📖 Plano de Leitura Bíblica
 
 App web **somente front-end** para acompanhar um plano de leitura da Bíblia,
-marcando os capítulos lidos. Todo o progresso fica salvo no `localStorage` do
+marcando as leituras feitas. Todo o progresso fica salvo no `localStorage` do
 navegador — não há backend nem login.
 
 ## Funcionalidades
 
-- **Plano de Êxodo** (40 capítulos).
-- **Capítulos por dia** configurável: os capítulos são agrupados em blocos
-  (ex.: 3 por dia → "Êxodo 1–3", "Êxodo 4–6"...). Cada dia tem um checkbox; o
-  estado fica indeterminado quando só parte dos capítulos do dia foi lida.
-- **Marcar capítulos lidos** com checkbox; barra de progresso e contagem.
+- **Plano de Tiago**: cronograma de 12 leituras por passagens, cada uma com um
+  tema (ex.: `Tiago 1:1–12 — A fé e a perseverança`).
+- **Marcar leituras** com checkbox; barra de progresso e contagem.
 - **Config → Dias para pular**: escolha os dias da semana (ex.: domingo) que o
-  cronograma deve ignorar. Os dias são reagendados automaticamente para as
+  cronograma deve ignorar. As leituras são reagendadas automaticamente para as
   próximas datas válidas.
-- **Data de início** e **capítulos por dia** ajustáveis por plano.
+- **Data de início** ajustável por plano.
+- **Flag "Ativo"**: apenas um plano fica ativo por vez.
+
+Dois tipos de plano são suportados na arquitetura: por **passagens** (lista fixa
+de leituras, como Tiago) e por **capítulos** (N capítulos por dia). Para planos
+por capítulo há também o controle de "capítulos por dia".
 - **Flag "Ativo"**: apenas um plano fica ativo por vez (estrutura já preparada
   para múltiplos planos no futuro).
 - **Zerar progresso** de um plano.

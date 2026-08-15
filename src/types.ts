@@ -1,22 +1,43 @@
 /** Dia da semana: 0 = domingo ... 6 = sábado (igual a Date.getDay()). */
 export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
-/** Um plano de leitura. Hoje só existe Êxodo, mas a estrutura suporta vários. */
-export interface ReadingPlan {
+/** Uma leitura predefinida (um dia) de um plano baseado em passagens. */
+export interface Reading {
+  /** Trecho lido, sem o nome do livro, ex: "1:1–12". */
+  passage: string
+  /** Tema/título do dia. */
+  theme: string
+}
+
+interface PlanBase {
   id: string
-  /** Nome exibido, ex: "Êxodo — 1 capítulo por dia". */
+  /** Nome exibido do plano. */
   name: string
-  /** Livro lido. */
+  /** Livro lido, ex: "Tiago". */
   book: string
-  /** Total de capítulos do livro. */
-  totalChapters: number
-  /** Quantos capítulos são lidos por dia (>= 1). */
-  chaptersPerDay: number
   /** Data de início do plano (ISO yyyy-mm-dd). */
   startDate: string
   /** Apenas um plano fica ativo por vez. */
   active: boolean
 }
+
+/** Plano baseado em capítulos: N capítulos por dia. */
+export interface ChapterPlan extends PlanBase {
+  kind: 'chapters'
+  /** Total de capítulos do livro. */
+  totalChapters: number
+  /** Quantos capítulos são lidos por dia (>= 1). */
+  chaptersPerDay: number
+}
+
+/** Plano baseado em passagens: uma lista fixa de leituras. */
+export interface ReadingListPlan extends PlanBase {
+  kind: 'readings'
+  /** Leituras predefinidas, uma por dia, na ordem. */
+  readings: Reading[]
+}
+
+export type ReadingPlan = ChapterPlan | ReadingListPlan
 
 export interface Settings {
   /** Dias da semana que o plano deve pular. */
@@ -25,9 +46,11 @@ export interface Settings {
 
 /**
  * Progresso de leitura.
- * planId -> (número do capítulo -> data ISO em que foi marcado como lido).
+ * planId -> (chave da unidade -> data ISO em que foi marcada como lida).
+ * A "unidade" é o número do capítulo (planos por capítulo) ou o índice da
+ * leitura (planos por passagem).
  */
-export type Progress = Record<string, Record<number, string>>
+export type Progress = Record<string, Record<string, string>>
 
 export interface AppState {
   plans: ReadingPlan[]

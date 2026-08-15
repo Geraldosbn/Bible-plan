@@ -5,11 +5,9 @@ import { todayISO } from './data/plans'
 
 export interface AppStateApi {
   state: AppState
-  /** Marca/desmarca um capítulo como lido no plano informado. */
-  toggleChapter: (planId: string, chapter: number) => void
-  /** Define o estado de leitura de um conjunto de capítulos (um dia inteiro). */
-  setChaptersRead: (planId: string, chapters: number[], read: boolean) => void
-  /** Define quantos capítulos são lidos por dia em um plano (mínimo 1). */
+  /** Define o estado de leitura de um conjunto de unidades (um dia inteiro). */
+  setUnitsRead: (planId: string, units: string[], read: boolean) => void
+  /** Define quantos capítulos são lidos por dia em um plano por capítulos. */
   setChaptersPerDay: (planId: string, chaptersPerDay: number) => void
   /** Ativa/desativa um dia da semana na lista de dias pulados. */
   toggleSkipWeekday: (day: Weekday) => void
@@ -28,32 +26,17 @@ export function useAppState(): AppStateApi {
     saveState(state)
   }, [state])
 
-  const toggleChapter = useCallback((planId: string, chapter: number) => {
-    setState((prev) => {
-      const planProgress = { ...(prev.progress[planId] ?? {}) }
-      if (planProgress[chapter]) {
-        delete planProgress[chapter]
-      } else {
-        planProgress[chapter] = todayISO()
-      }
-      return {
-        ...prev,
-        progress: { ...prev.progress, [planId]: planProgress },
-      }
-    })
-  }, [])
-
-  const setChaptersRead = useCallback(
-    (planId: string, chapters: number[], read: boolean) => {
+  const setUnitsRead = useCallback(
+    (planId: string, units: string[], read: boolean) => {
       setState((prev) => {
         const planProgress = { ...(prev.progress[planId] ?? {}) }
         if (read) {
           const stamp = todayISO()
-          for (const c of chapters) {
-            if (!planProgress[c]) planProgress[c] = stamp
+          for (const u of units) {
+            if (!planProgress[u]) planProgress[u] = stamp
           }
         } else {
-          for (const c of chapters) delete planProgress[c]
+          for (const u of units) delete planProgress[u]
         }
         return {
           ...prev,
@@ -70,7 +53,9 @@ export function useAppState(): AppStateApi {
       setState((prev) => ({
         ...prev,
         plans: prev.plans.map((p) =>
-          p.id === planId ? { ...p, chaptersPerDay: value } : p,
+          p.id === planId && p.kind === 'chapters'
+            ? { ...p, chaptersPerDay: value }
+            : p,
         ),
       }))
     },
@@ -113,8 +98,7 @@ export function useAppState(): AppStateApi {
 
   return {
     state,
-    toggleChapter,
-    setChaptersRead,
+    setUnitsRead,
     setChaptersPerDay,
     toggleSkipWeekday,
     setActivePlan,
