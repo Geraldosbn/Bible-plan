@@ -9,20 +9,25 @@ export function todayISO(): string {
   return `${y}-${m}-${d}`
 }
 
-/** Cronograma de leitura de Tiago (12 leituras, uma por dia). */
-export const JAMES_READINGS: Reading[] = [
-  { passage: '1:1–12', theme: 'A fé e a perseverança' },
-  { passage: '1:13–18', theme: 'A tentação e a bondade de Deus' },
-  { passage: '1:19–27', theme: 'Praticantes da Palavra' },
-  { passage: '2:1–13', theme: 'Não façam discriminação entre as pessoas' },
-  { passage: '2:14–26', theme: 'A fé e as obras' },
-  { passage: '3:1–12', theme: 'O domínio da língua' },
-  { passage: '3:13–18', theme: 'A sabedoria que vem do alto' },
-  { passage: '4:1–10', theme: 'Humildade diante de Deus' },
-  { passage: '4:11–17', theme: 'Não julguem e não se gloriem no amanhã' },
-  { passage: '5:1–6', theme: 'Advertência aos ricos' },
-  { passage: '5:7–12', theme: 'Paciência e perseverança' },
-  { passage: '5:13–20', theme: 'O poder da oração' },
+/**
+ * Cronograma de leitura de Gálatas, dividido pelas seções temáticas
+ * padrão das Bíblias em português (14 porções).
+ */
+export const GALATIANS_READINGS: Reading[] = [
+  { passage: '1:1–5', theme: 'Saudação' },
+  { passage: '1:6–10', theme: 'Não há outro evangelho' },
+  { passage: '1:11–24', theme: 'Paulo chamado por Deus' },
+  { passage: '2:1–10', theme: 'Paulo aceito pelos apóstolos' },
+  { passage: '2:11–21', theme: 'Paulo confronta Pedro' },
+  { passage: '3:1–14', theme: 'Fé ou observância da lei' },
+  { passage: '3:15–25', theme: 'A lei e a promessa' },
+  { passage: '3:26–4:7', theme: 'Filhos de Deus' },
+  { passage: '4:8–20', theme: 'A preocupação de Paulo com os gálatas' },
+  { passage: '4:21–31', theme: 'Agar e Sara' },
+  { passage: '5:1–15', theme: 'Liberdade em Cristo' },
+  { passage: '5:16–26', theme: 'A vida pelo Espírito' },
+  { passage: '6:1–10', theme: 'Ajudar uns aos outros' },
+  { passage: '6:11–18', theme: 'Conclusão' },
 ]
 
 /** Planos disponíveis por padrão (na primeira execução). */
@@ -30,10 +35,10 @@ export function defaultPlans(): ReadingPlan[] {
   return [
     {
       kind: 'readings',
-      id: 'tiago',
-      name: 'Tiago',
-      book: 'Tiago',
-      readings: JAMES_READINGS,
+      id: 'galatas',
+      name: 'Gálatas',
+      book: 'Gálatas',
+      readings: GALATIANS_READINGS,
       startDate: todayISO(),
       active: true,
     },

@@ -6,8 +6,9 @@ navegador — não há backend nem login.
 
 ## Funcionalidades
 
-- **Plano de Tiago**: cronograma de 12 leituras por passagens, cada uma com um
-  tema (ex.: `Tiago 1:1–12 — A fé e a perseverança`).
+- **Plano de Gálatas**: cronograma de 14 leituras por passagens (seções
+  temáticas padrão), cada uma com um tema (ex.: `Gálatas 5:1–15 — Liberdade em
+  Cristo`).
 - **Marcar leituras** com checkbox; barra de progresso e contagem.
 - **Config → Dias para pular**: escolha os dias da semana (ex.: domingo) que o
   cronograma deve ignorar. As leituras são reagendadas automaticamente para as

@@ -1,8 +1,8 @@
 import type { AppState, ReadingPlan } from './types'
 import { defaultPlans } from './data/plans'
 
-// v2: modelo passou de "capítulos" (Êxodo) para plano de Tiago por passagens.
-const STORAGE_KEY = 'bible-plan:v2'
+// v3: livro do plano passou de Tiago para Gálatas.
+const STORAGE_KEY = 'bible-plan:v3'
 
 export function defaultState(): AppState {
   return {
