@@ -316,7 +316,8 @@
 }
 
 .field input[type='date'],
-.field input[type='number'] {
+.field input[type='number'],
+.field input[type='text'] {
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
@@ -327,6 +328,39 @@
 
 .field input[type='number'] {
   width: 5rem;
+}
+
+/* Campo de data pt-BR: texto dd/mm/aaaa + ícone de calendário nativo */
+.date-field {
+  display: flex;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+
+.date-field input[type='text'] {
+  width: 6.5rem;
+}
+
+.date-field .date-picker {
+  width: 2.4rem;
+  padding: 0.4rem;
+  background: var(--surface);
+  color: transparent;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+}
+
+/* Mostra apenas o ícone do seletor (Chromium/Blink). */
+.date-field .date-picker::-webkit-datetime-edit,
+.date-field .date-picker::-webkit-inner-spin-button,
+.date-field .date-picker::-webkit-clear-button {
+  display: none;
+}
+
+.date-field .date-picker::-webkit-calendar-picker-indicator {
+  margin: 0;
+  cursor: pointer;
+  filter: invert(0.8);
 }
 
 .btn-danger {
