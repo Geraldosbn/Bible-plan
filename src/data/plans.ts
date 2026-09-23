@@ -9,25 +9,25 @@ export function todayISO(): string {
   return `${y}-${m}-${d}`
 }
 
+/** Gera leituras de um mesmo livro a partir de uma lista de trechos. */
+function readingsOf(book: string, passages: string[]): Reading[] {
+  return passages.map((passage) => ({ book, passage }))
+}
+
 /**
- * Cronograma de leitura de Gálatas, dividido pelas seções temáticas
- * padrão das Bíblias em português (14 porções).
+ * Cronograma combinado das cartas de João (1, 2 e 3 João), em sequência.
+ * 25 leituras por passagens, sem tema.
  */
-export const GALATIANS_READINGS: Reading[] = [
-  { passage: '1:1–5', theme: 'Saudação' },
-  { passage: '1:6–10', theme: 'Não há outro evangelho' },
-  { passage: '1:11–24', theme: 'Paulo chamado por Deus' },
-  { passage: '2:1–10', theme: 'Paulo aceito pelos apóstolos' },
-  { passage: '2:11–21', theme: 'Paulo confronta Pedro' },
-  { passage: '3:1–14', theme: 'Fé ou observância da lei' },
-  { passage: '3:15–25', theme: 'A lei e a promessa' },
-  { passage: '3:26–4:7', theme: 'Filhos de Deus' },
-  { passage: '4:8–20', theme: 'A preocupação de Paulo com os gálatas' },
-  { passage: '4:21–31', theme: 'Agar e Sara' },
-  { passage: '5:1–15', theme: 'Liberdade em Cristo' },
-  { passage: '5:16–26', theme: 'A vida pelo Espírito' },
-  { passage: '6:1–10', theme: 'Ajudar uns aos outros' },
-  { passage: '6:11–18', theme: 'Conclusão' },
+export const JOHN_LETTERS_READINGS: Reading[] = [
+  ...readingsOf('1 João', [
+    '1:1–4', '1:5–10',
+    '2:1–6', '2:7–11', '2:12–14', '2:15–17', '2:18–26', '2:27–29',
+    '3:1–6', '3:7–10', '3:11–24',
+    '4:1–6', '4:7–21',
+    '5:1–5', '5:6–12', '5:13–19', '5:20–21',
+  ]),
+  ...readingsOf('2 João', ['1:1–3', '1:4–6', '1:7–11', '1:12–13']),
+  ...readingsOf('3 João', ['1:1–4', '1:5–8', '1:9–12', '1:13–15']),
 ]
 
 /** Planos disponíveis por padrão (na primeira execução). */
@@ -35,10 +35,10 @@ export function defaultPlans(): ReadingPlan[] {
   return [
     {
       kind: 'readings',
-      id: 'galatas',
-      name: 'Gálatas',
-      book: 'Gálatas',
-      readings: GALATIANS_READINGS,
+      id: 'cartas-de-joao',
+      name: '1, 2 e 3 João',
+      book: '1, 2 e 3 João',
+      readings: JOHN_LETTERS_READINGS,
       startDate: todayISO(),
       active: true,
     },

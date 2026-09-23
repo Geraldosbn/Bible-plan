@@ -6,9 +6,9 @@ navegador — não há backend nem login.
 
 ## Funcionalidades
 
-- **Plano de Gálatas**: cronograma de 14 leituras por passagens (seções
-  temáticas padrão), cada uma com um tema (ex.: `Gálatas 5:1–15 — Liberdade em
-  Cristo`).
+- **Plano combinado de 1, 2 e 3 João**: cronograma único com 25 leituras por
+  passagens, em sequência pelas três cartas (ex.: `1 João 1:1–4`, `2 João 1:1–3`,
+  `3 João 1:13–15`), com uma barra de progresso só para o conjunto.
 - **Marcar leituras** com checkbox; barra de progresso e contagem.
 - **Config → Dias para pular**: escolha os dias da semana (ex.: domingo) que o
   cronograma deve ignorar. As leituras são reagendadas automaticamente para as

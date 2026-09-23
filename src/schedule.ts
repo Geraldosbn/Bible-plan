@@ -35,7 +35,7 @@ interface DayDef {
 function planDays(plan: ReadingPlan): DayDef[] {
   if (plan.kind === 'readings') {
     return plan.readings.map((r, index) => ({
-      label: `${plan.book} ${r.passage}`,
+      label: `${r.book ?? plan.book} ${r.passage}`,
       theme: r.theme,
       units: [String(index)],
     }))

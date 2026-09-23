@@ -3,10 +3,15 @@ export type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 /** Uma leitura predefinida (um dia) de um plano baseado em passagens. */
 export interface Reading {
-  /** Trecho lido, sem o nome do livro, ex: "1:1–12". */
+  /**
+   * Livro desta leitura. Usado em planos que atravessam vários livros
+   * (ex.: 1, 2 e 3 João). Se ausente, usa o livro do plano.
+   */
+  book?: string
+  /** Trecho lido, sem o nome do livro, ex: "1:1–4". */
   passage: string
-  /** Tema/título do dia. */
-  theme: string
+  /** Tema/título do dia (opcional). */
+  theme?: string
 }
 
 interface PlanBase {
