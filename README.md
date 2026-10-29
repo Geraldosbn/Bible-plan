@@ -6,9 +6,8 @@ navegador — não há backend nem login.
 
 ## Funcionalidades
 
-- **Plano combinado de 1, 2 e 3 João**: cronograma único com 25 leituras por
-  passagens, em sequência pelas três cartas (ex.: `1 João 1:1–4`, `2 João 1:1–3`,
-  `3 João 1:13–15`), com uma barra de progresso só para o conjunto.
+- **Evangelho de João**: cronograma com 52 leituras, uma por seção segundo a
+  divisão da Sociedade Bíblica do Brasil (ex.: `João 1:1–18`, `João 7:53–8:11`).
 - **Marcar leituras** com checkbox; barra de progresso e contagem.
 - **Config → Dias para pular**: escolha os dias da semana (ex.: domingo) que o
   cronograma deve ignorar. As leituras são reagendadas automaticamente para as
@@ -17,7 +16,7 @@ navegador — não há backend nem login.
 - **Flag "Ativo"**: apenas um plano fica ativo por vez.
 
 Dois tipos de plano são suportados na arquitetura: por **passagens** (lista fixa
-de leituras, como Tiago) e por **capítulos** (N capítulos por dia). Para planos
+de leituras, como João) e por **capítulos** (N capítulos por dia). Para planos
 por capítulo há também o controle de "capítulos por dia".
 - **Flag "Ativo"**: apenas um plano fica ativo por vez (estrutura já preparada
   para múltiplos planos no futuro).
