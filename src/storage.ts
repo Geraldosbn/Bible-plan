@@ -1,10 +1,10 @@
 import type { AppState, ReadingPlan } from './types'
-import { defaultPlans } from './data/plans'
+import { defaultPlans, gospelPlan } from './data/plans'
 
-// v5: passa a pular sábado e domingo por padrão.
-const STORAGE_KEY = 'bible-plan:v5'
-// Versão anterior — migrada preservando planos e progresso.
-const LEGACY_KEY = 'bible-plan:v4'
+// v6: adiciona o plano do Evangelho de João (ARA) e o torna o ativo.
+const STORAGE_KEY = 'bible-plan:v6'
+// Versão anterior — migrada preservando planos, progresso e configurações.
+const LEGACY_KEY = 'bible-plan:v5'
 
 export function defaultState(): AppState {
   return {
@@ -55,10 +55,20 @@ export function loadState(): AppState {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) return mergeState(JSON.parse(raw) as Partial<AppState>, base, false)
 
-    // Migração v4 -> v5: preserva planos/progresso e aplica o novo default.
+    // Migração v5 -> v6: preserva tudo e acrescenta o Evangelho de João ativo.
     const legacy = localStorage.getItem(LEGACY_KEY)
     if (legacy) {
-      return mergeState(JSON.parse(legacy) as Partial<AppState>, base, true)
+      const old = mergeState(JSON.parse(legacy) as Partial<AppState>, base, false)
+      const hasGospel = old.plans.some((p) => p.id === 'evangelho-de-joao')
+      return hasGospel
+        ? old
+        : {
+            ...old,
+            plans: [
+              gospelPlan(true),
+              ...old.plans.map((p) => ({ ...p, active: false })),
+            ],
+          }
     }
   } catch {
     // JSON corrompido ou localStorage indisponível: começa do zero.

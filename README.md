@@ -6,6 +6,8 @@ navegador — não há backend nem login.
 
 ## Funcionalidades
 
+- **Evangelho de João**: 84 leituras por seções da ARA (ex.: `João 1:1–14`,
+  `1:15–18`, `1:19–28`…). Plano ativo por padrão.
 - **Plano combinado de 1, 2 e 3 João**: cronograma único com 25 leituras por
   passagens, em sequência pelas três cartas (ex.: `1 João 1:1–4`, `2 João 1:1–3`,
   `3 João 1:13–15`), com uma barra de progresso só para o conjunto.
@@ -23,6 +25,12 @@ por capítulo há também o controle de "capítulos por dia".
   para múltiplos planos no futuro).
 - **Zerar progresso** de um plano.
 - Marcação de dia **"hoje"** e **"atrasado"** no cronograma.
+
+## Versão bíblica base
+
+A versão base é a **ARA** (Almeida Revista e Atualizada, `BASE_VERSION` em
+`src/data/plans.ts`). As divisões dos cronogramas seguem as seções dessa
+versão.
 
 ## Stack
 
