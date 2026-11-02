@@ -6,7 +6,7 @@ navegador — não há backend nem login.
 
 ## Funcionalidades
 
-- **Evangelho de João**: 84 leituras por seções da ARA (ex.: `João 1:1–14`,
+- **Evangelho de João**: 82 leituras por seções da ARA (ex.: `João 1:1–14`,
   `1:15–18`, `1:19–28`…). Plano ativo por padrão.
 - **Plano combinado de 1, 2 e 3 João**: cronograma único com 25 leituras por
   passagens, em sequência pelas três cartas (ex.: `1 João 1:1–4`, `2 João 1:1–3`,
