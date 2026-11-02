@@ -1,10 +1,12 @@
 import type { AppState, ReadingPlan } from './types'
-import { defaultPlans, gospelPlan } from './data/plans'
+import { defaultPlans, gospelPlan, todayISO } from './data/plans'
 
-// v6: adiciona o plano do Evangelho de João (ARA) e o torna o ativo.
-const STORAGE_KEY = 'bible-plan:v6'
-// Versão anterior — migrada preservando planos, progresso e configurações.
-const LEGACY_KEY = 'bible-plan:v5'
+const GOSPEL_ID = 'evangelho-de-joao'
+
+// v7: Evangelho de João com 82 leituras (seções da ARA) como plano ativo.
+const STORAGE_KEY = 'bible-plan:v7'
+// Versões anteriores — migradas preservando configurações e outros planos.
+const LEGACY_KEYS = ['bible-plan:v6', 'bible-plan:v5']
 
 export function defaultState(): AppState {
   return {
@@ -55,20 +57,22 @@ export function loadState(): AppState {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) return mergeState(JSON.parse(raw) as Partial<AppState>, base, false)
 
-    // Migração v5 -> v6: preserva tudo e acrescenta o Evangelho de João ativo.
-    const legacy = localStorage.getItem(LEGACY_KEY)
+    // Migração v5/v6 -> v7: troca o Evangelho de João pelo novo cronograma.
+    // O progresso do plano antigo é descartado: os índices das leituras mudam.
+    const legacy = LEGACY_KEYS.map((k) => localStorage.getItem(k)).find(Boolean)
     if (legacy) {
       const old = mergeState(JSON.parse(legacy) as Partial<AppState>, base, false)
-      const hasGospel = old.plans.some((p) => p.id === 'evangelho-de-joao')
-      return hasGospel
-        ? old
-        : {
-            ...old,
-            plans: [
-              gospelPlan(true),
-              ...old.plans.map((p) => ({ ...p, active: false })),
-            ],
-          }
+      const previous = old.plans.find((p) => p.id === GOSPEL_ID)
+      const progress = { ...old.progress }
+      delete progress[GOSPEL_ID]
+      return {
+        ...old,
+        plans: [
+          { ...gospelPlan(true), startDate: previous?.startDate ?? todayISO() },
+          ...old.plans.filter((p) => p.id !== GOSPEL_ID).map((p) => ({ ...p, active: false })),
+        ],
+        progress,
+      }
     }
   } catch {
     // JSON corrompido ou localStorage indisponível: começa do zero.
